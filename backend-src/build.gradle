@@ -1,0 +1,72 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.4.5'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.inutri'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+configurations {
+    testImplementation.extendsFrom runtimeOnly
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+	implementation 'org.flywaydb:flyway-mysql'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	implementation 'org.hibernate.validator:hibernate-validator:8.0.0.Final'
+    runtimeOnly 'com.mysql:mysql-connector-j:8.4.0'
+
+	/*Libreria no oficial de OpenAI*/
+	implementation ('io.github.sashirestela:simple-openai:3.21.0'){
+		exclude group: 'org.slf4j', module: 'slf4j-api'
+		exclude group: 'org.slf4j', module: 'slf4j-simple'
+	}
+
+	/*Parsear .csv a .json*/
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.17.0'
+
+	/*Optimizacion lineal por medio de Simplex*/
+	implementation 'org.apache.commons:commons-math3:3.6.1'
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testImplementation 'io.cucumber:cucumber-java:7.14.0'
+    testImplementation 'io.cucumber:cucumber-spring:7.14.0'
+    testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.14.0'
+    testImplementation 'org.junit.platform:junit-platform-suite:1.10.2'
+	testImplementation 'com.h2database:h2'
+}
+
+test {
+	useJUnitPlatform()
+	systemProperty "spring.profiles.active", "test"
+}
